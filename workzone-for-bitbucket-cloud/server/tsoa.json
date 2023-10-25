@@ -1,0 +1,20 @@
+{
+  "entryFile": "src/main.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": ["src/**/*.api.ts"],
+  "spec": {
+    "outputDirectory": "out/generated",
+    "specVersion": 3,
+    "basePath": "api"
+  },
+  "routes": {
+    "basePath": "api",
+    "routesDir": "out/generated"
+  },
+  "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@shared/*": ["../shared/*"]
+    }
+  }
+}

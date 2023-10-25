@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "target": "es2015",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "jsx": "preserve",
+    "paths": {
+      "@/*": ["../client/src/*"],
+      "bitbucket-api": ["../bitbucket-api"],
+      "@client-api": ["../server/client-api"],
+      "@shared/*": ["../shared/*"]
+    }
+  },
+  "exclude": ["./out/**.*", "node_modules"],
+  "references": [{"path": "../bitbucket-api"}, {"path": "../server/client-api"}]
+}

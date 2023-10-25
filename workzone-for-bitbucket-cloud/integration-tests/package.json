@@ -1,0 +1,15 @@
+{
+  "name": "integration-tests",
+  "scripts": {
+    "test": "mocha --timeout 25000 **/*.spec.*"
+  },
+  "dependencies": {
+    "del": "^6.0.0",
+    "got": "^11.8.3",
+    "optional-require": "^1.1.8",
+    "playwright": "^1.18.0"
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": "eslint --cache --cache-location node_modules/.cache/ --fix --max-warnings 0"
+  }
+}

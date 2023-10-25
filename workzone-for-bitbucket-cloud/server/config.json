@@ -1,0 +1,53 @@
+{
+  "product": "bitbucket",
+  // TODO report this bug to atlassian
+  // NOTE: global props don't work, so repeat it for every env
+  "development": {
+    // Register/update support seems to be broken for BB, however it
+    // updates the descriptor on change
+    "watch": true,
+    "port": 9000,
+    "errorTemplate": false,
+    "expressErrorHandling": true,
+    "appKey": "com.izymes.workzone-development",
+    // 10 minutes
+    "maxTokenAge": 600
+    // "store" defined at runtime
+  },
+  "staging": {
+    "port": "/var/run/workzone/server.sock",
+    "errorTemplate": false,
+    "expressErrorHandling": true,
+    "appKey": "com.izymes.workzone-staging",
+    "localBaseUrl": "https://staging.workzonecloud.net",
+    // 10 minutes
+    "maxTokenAge": 600,
+    "store": {
+      "adapter": "dynamodb",
+      "table": "workzone-staging-tenants",
+      "region": "us-west-2",
+      "connectionTimeout": 2500,
+      "timeout": 2500,
+      "maxRetries": 4
+    },
+    "whitelist": ["bitbucket.org", "api.bitbucket.org"]
+  },
+  "production": {
+    "port": "/var/run/workzone/server.sock",
+    "errorTemplate": false,
+    "expressErrorHandling": true,
+    "appKey": "com.izymes.workzone",
+    "localBaseUrl": "https://workzonecloud.net",
+    // 10 minutes
+    "maxTokenAge": 600,
+    "store": {
+      "adapter": "dynamodb",
+      "table": "workzone-tenants",
+      "region": "us-west-2",
+      "connectionTimeout": 2500,
+      "timeout": 2500,
+      "maxRetries": 4
+    },
+    "whitelist": ["bitbucket.org", "api.bitbucket.org"]
+  }
+}

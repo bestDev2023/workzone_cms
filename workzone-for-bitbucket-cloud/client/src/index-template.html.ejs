@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' bitbucket.org *.bitbucket.org *.cloudfront.net *.amazonaws.com 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: *.gravatar.com *.wp.com;" />
+    <meta name="workzone-revision" content="<%= appRevision %>" />
+    <% if (process.env.NODE_ENV === "production") { %>
+    <script>
+      ;(function (n, i, v, r, s, c, x, z) {
+        x = window.AwsRumClient = {q: [], n: n, i: i, v: v, r: r, c: c}
+        window[n] = function (c, p) {
+          x.q.push({c: c, p: p})
+        }
+        z = document.createElement("script")
+        z.async = true
+        z.src = s
+        document.head.insertBefore(
+          z,
+          document.getElementsByTagName("script")[0]
+        )
+      })(
+        "cwr",
+        "491d83b6-88b1-4378-9ea6-9bf4e94eda79",
+        "1.0.0",
+        "us-west-2",
+        "https://client.rum.us-east-1.amazonaws.com/1.0.4/cwr.js",
+        {
+          sessionSampleRate: 1,
+          guestRoleArn:
+            "arn:aws:iam::077491440934:role/RUM-Monitor-us-west-2-077491440934-9688302570461-Unauth",
+          identityPoolId: "us-west-2:c0ee52c8-96ec-4d67-8f66-ec67ce722d93",
+          endpoint: "https://dataplane.rum.us-west-2.amazonaws.com",
+          telemetries: [
+              "performance",
+              "errors",
+              "http",
+              ["interaction", {events: [{event: "click", element: document}]}]
+            ],
+          allowCookies: true,
+          cookieAttributes: {sameSite: "None"},
+          enableXRay: false,
+        }
+      )
+    </script>
+    <% } %>
+    <script
+      src="https://bitbucket.org/atlassian-connect/all.js"
+      type="text/javascript"
+    ></script>
+  </head>
+  <body>
+    <div id="root" class="ac-content"></div>
+    <script type="module">
+      import {render} from "/render"
+      import {<%= view %>} from "/<%= view %>.entry"
+
+      const urlSearchParams = new URLSearchParams(window.location.search)
+      const params = Object.fromEntries(urlSearchParams.entries())
+
+      render(<%= view %>, params)
+    </script>
+  </body>
+</html>

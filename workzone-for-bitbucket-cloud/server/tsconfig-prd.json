@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.json",
+  // Not supported by ts-node yet (not inherited from base)
+  "references": [{"path": "../bitbucket-api"}, {"path": "./client-api"}],
+  "exclude": ["sample/**", "**/test/**", "**/*.spec.ts"]
+}

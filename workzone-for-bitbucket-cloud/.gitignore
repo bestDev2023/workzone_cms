@@ -1,0 +1,45 @@
+.vscode
+.DS_Store
+node_modules
+npm-debug.log
+*.pem
+credentials.json
+store.db
+tsconfig.tsbuildinfo
+server/client-api/index*
+out
+dist
+
+secrets
+
+# Ignore locals
+*.local
+#*.local.*
+
+
+# IDEA - based on https://github.com/github/gitignore/blob/master/Global/JetBrains.gitignore
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+#.idea/**/dictionaries
+.idea/**/shelf
+.idea/codeStyles/
+.idea/prettier.xml
+.idea/sbt.xml
+.idea/misc.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml

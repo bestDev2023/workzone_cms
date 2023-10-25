@@ -1,0 +1,31 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "target": "ES2021",
+    "module": "CommonJS",
+    "lib": ["ES2021"],
+    "experimentalDecorators": true,
+    "outDir": "out/dist/app",
+
+    "paths": {
+      "@/*": ["./*"],
+      "bitbucket-api": ["../../bitbucket-api/dist"],
+      "@shared/*": ["../../shared/*"],
+      "@sample/*": ["../../sample/*"],
+      "@generated/*": ["../out/generated/*"]
+    }
+  },
+  "include": ["src/**/*"],
+
+  // Not supported by ts-node yet
+  "references": [{"path": "../bitbucket-api"}, {"path": "./client-api"}],
+
+  "ts-node": {
+    // "emit": true,
+    "compilerHost": true,
+    // mocha-intellij otherwise it fails when running tests
+    "ignore": ["node_modules", "mocha-intellij"],
+    "require": ["tsconfig-paths/register", "./src/preload.ts"]
+  }
+}

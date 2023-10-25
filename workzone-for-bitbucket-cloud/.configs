@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Running project config"
+git config branch.autosetuprebase always

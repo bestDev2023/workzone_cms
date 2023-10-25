@@ -1,0 +1,8 @@
+#!/bin/sh
+[ -n "$CI" ] && exit 0
+
+. "$(dirname "$0")/_/husky.sh"
+
+npx git-pull-run --pattern "{,client/,server/}package-lock.json" --command "npm install"
+
+npx git-pull-run --pattern ".configs" --command "./.configs"

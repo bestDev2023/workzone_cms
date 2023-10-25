@@ -1,0 +1,27 @@
+{
+  "extends": "../tsconfig-base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "target": "ES2021",
+    "module": "CommonJS",
+    "lib": ["ES2021", "DOM"],
+    "experimentalDecorators": true,
+    "outDir": "out/dist/",
+
+    "paths": {
+      "@/*": ["./*"],
+      "@shared/*": ["../shared/*"]
+    }
+  },
+  "types": ["node", "mocha", "global"],
+  // Use typeRoots for ts-node support since it doesn't work with "includes"
+  "typeRoots": ["./node_modules/@types", "./typings"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    // "emit": true,
+    "compilerHost": true,
+    // mocha-intellij otherwise it fails when running tests
+    "ignore": ["node_modules", "mocha-intellij"],
+    "require": ["tsconfig-paths/register"]
+  }
+}

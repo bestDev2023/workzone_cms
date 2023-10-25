@@ -1,0 +1,103 @@
+image: node:16
+
+definitions:
+  scripts:
+    - script: &deploy
+        - echo ${BITBUCKET_DEPLOYMENT_ENVIRONMENT}
+        - export NODE_ENV=${BITBUCKET_DEPLOYMENT_ENVIRONMENT}
+        - echo "Deploying to ${NODE_ENV}..."
+        # Force dev dependencies
+        - npm ci --production=false
+        - npm run deploy:prepare
+        - apt-get update
+        - apt-get install zip
+        - cd out/build
+        - zip -rq ../workzone.zip .
+        - export COMMIT_SHORT=$(git log --pretty=format:'%h' -n 1)
+        - export DATE_DEPLOY=$(date +"%Y-%m-%d|%H:%M")
+        - export WAIT_DEPLOY=$([ "NODE_ENV" = "staging" ] && echo "YES" || echo "NO")
+        - pipe: atlassian/aws-elasticbeanstalk-deploy:1.0.2
+          variables:
+            APPLICATION_NAME: "workzone"
+            VERSION_LABEL: "${DATE_DEPLOY}_${COMMIT_SHORT}_build-${BITBUCKET_BUILD_NUMBER}_${NODE_ENV}"
+            ENVIRONMENT_NAME: "workzone-${NODE_ENV}"
+            ZIP_FILE: "../workzone.zip"
+            S3_BUCKET: "workzone-elasticbeanstalk-deployment-us-west-2"
+            WAIT: "${WAIT_DEPLOY}"
+        - cd $BITBUCKET_CLONE_DIR
+        - git tag -am "Tagging for ${NODE_ENV} release ${BITBUCKET_BUILD_NUMBER}" ${NODE_ENV} --force
+        - git push origin ${NODE_ENV} --force
+
+  steps:
+    - step: &build-test
+        size: 2x
+        name: "Build application"
+        caches:
+          - node
+        script:
+          - npm ci
+          - npm run bitbucket-api:build
+          - cd server
+          - npm ci
+          - npm run test:server
+          - cd $BITBUCKET_CLONE_DIR
+          - ./build.sh
+          # Resolve symlink for artifacts
+          - cp -rfL out/build out/build-resolved && rm -rf out/build && mv out/build-resolved out/build
+        artifacts:
+          - out/build/**
+
+    - step: &deploy-staging
+        name: "Deploy to staging"
+        deployment: staging
+        trigger: manual
+        caches:
+          - docker
+        script: *deploy
+
+    - step: &deploy-production
+        name: "Deploy to production"
+        deployment: production
+        trigger: manual
+        caches:
+          - docker
+        script: *deploy
+
+    - step: &integration-tests
+        name: "Integration tests"
+        image: mcr.microsoft.com/playwright:focal
+        trigger: automatic
+        script:
+          - npm ci
+          - cd integration-tests
+          - npm ci
+          - npm run test
+
+pipelines:
+  pull-requests:
+    "**":
+      - step: *build-test
+      - step:
+          <<: *deploy-staging
+          trigger: manual
+
+  branches:
+    main:
+      - step: *build-test
+      - step:
+          <<: *deploy-staging
+          trigger: automatic
+      - step: *integration-tests
+      - step:
+          <<: *deploy-production
+          trigger: manual
+
+    "**rgarcia**":
+      - step:
+          <<: *build-test
+          runs-on:
+            - "rgarcia"
+      - step:
+          <<: *deploy-staging
+          trigger: manual
+      - step: *integration-tests

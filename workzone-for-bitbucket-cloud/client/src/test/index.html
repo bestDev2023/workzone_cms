@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <body>
+    <div id="mocha"></div>
+
+    <script type="module">
+      window.global = window
+      import "mocha/mocha.css"
+      import "mocha/mocha-es2018"
+
+      mocha.setup({ui: "bdd", globals: "$r"})
+      mocha.checkLeaks()
+      if (window.location.search.includes("grep=")) {
+        import("@testing-library/react/dont-cleanup-after-each")
+      }
+    </script>
+    <script type="module">
+      // Shim for Node/power-assert
+      import {Buffer} from "buffer"
+      window.Buffer = Buffer
+
+      import {loadAllModules} from "./index.ts"
+      await loadAllModules({includeSpecs: true})
+
+      mocha.run()
+    </script>
+  </body>
+</html>

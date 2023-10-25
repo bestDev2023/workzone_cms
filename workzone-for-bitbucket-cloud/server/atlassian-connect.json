@@ -1,0 +1,92 @@
+{
+  "key": "{{appKey}}",
+  "name": "Workzone",
+  "description": "Workzone for Bitbucket cloud",
+  "vendor": {
+    "name": "Izymes",
+    "url": "https://izymes.com"
+  },
+  "baseUrl": "{{localBaseUrl}}",
+
+  "authentication": {
+    "type": "jwt"
+  },
+  "lifecycle": {
+    "installed": "/installed"
+  },
+  "modules": {
+    "webhooks": [
+      {
+        "event": "pullrequest:approved",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "pullrequest:created",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "pullrequest:updated",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "pullrequest:changes_request_created",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "pullrequest:changes_request_removed",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "repo:commit_status_created",
+        "url": "/api/webhook"
+      },
+      {
+        "event": "repo:commit_status_updated",
+        "url": "/api/webhook"
+      }
+    ],
+    "adminPages": [
+      {
+        "url": "/pull-request-settings-page.html",
+        "name": {
+          "value": "Pull request settings - Workzone"
+        },
+        "location": "org.bitbucket.account.admin",
+        "key": "pull-request-settings-page"
+      }
+    ],
+    "configurePage": {
+      "url": "/account-settings-page.html",
+      "name": {
+        "value": "Account settings"
+      },
+      "key": "account-settings-page"
+    },
+    "webCards": [
+      {
+        "key": "workzone-merge-checks",
+        "name": {
+          "value": "Workzone checks"
+        },
+        "url": "/checks-card.html?workspacePath={repository.workspace.slug}&repositoryPath={repository.slug}&pullrequestId={pullrequest.id}",
+        "location": "org.bitbucket.pullrequest",
+        "icon": {
+          "url": "{{localBaseUrl}}/workzone-icon.svg"
+        },
+        "weight": 0
+      }
+    ],
+    "webPanels": [
+      {
+        "url": "/pull-request-panel.html?workspacePath={repository.workspace.slug}&repositoryPath={repository.slug}&pullrequestId={pullrequest.id}&pullRequestState={pullrequest.state}",
+        "name": {
+          "value": ""
+        },
+        "location": "org.bitbucket.pullrequest.overview.informationPanel",
+        "key": "workzone-pullrequest-web-panel"
+      }
+    ]
+  },
+  "scopes": ["account", "repository:admin", "pullrequest:write"],
+  "contexts": ["account"]
+}
